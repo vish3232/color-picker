@@ -59,6 +59,7 @@ const Square = ({
     const ctx = canvasRef.getContext("2d")
 
     function computePosition(e) {
+     
       const x = Math.max(
         crossSize / -2,
         Math.min(
@@ -87,7 +88,6 @@ const Square = ({
       const x1 = Math.min(x + crossSize / 2, squareSize - 1)
       const y1 = Math.min(y + crossSize / 2, squareSize - 1)
       const [r, g, b] = ctx.getImageData(x1, y1, 1, 1).data
-      alert(rgbToHex(r, g,b))
       const [h, s, l] = convertRGBtoHSL([r, g, b])
       setSquare([s, l])
       setSquareXY([x, y])

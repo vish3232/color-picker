@@ -1,9 +1,9 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import styled from "styled-components"
-import Picker from "./Picker"
-import { GlobalStyle } from "./GlobalStyle"
-import ColorPickerDesign from "./ColorPickerDesign"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import styled from 'styled-components'
+import Picker from './Picker'
+import { GlobalStyle } from './GlobalStyle'
+import ColorPickerDesign from './ColorPickerDesign'
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -15,10 +15,15 @@ const AppWrapper = styled.div`
 function App() {
   return (
     <>
-    <ColorPickerDesign/>
+   {/*    <GlobalStyle />
+      <AppWrapper>
+        <Picker />
+      </AppWrapper>
+      */}
+      <ColorPickerDesign/>
     </>
   )
 }
 
-const rootElement = document.getElementById("root")
+const rootElement = document.getElementById('root')
 ReactDOM.render(<App />, rootElement)

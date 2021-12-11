@@ -1,5 +1,5 @@
-import React from "react"
-import { createGlobalStyle } from "styled-components"
+import React from 'react'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
 html {
@@ -12,6 +12,6 @@ body {
   margin: 0;
 }
 *, *:before, *:after {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 `
