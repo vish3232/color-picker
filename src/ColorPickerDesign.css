@@ -72,11 +72,11 @@ border-radius: 5px;
 }
 
 .hue-container{
+    position: relative;
     margin-top: 10px;
     width: 100%;
     height: 10px;
     
-    background: linear-gradient(90deg, #0078FF 0%, #00ECC2 24.48%, #FFD75F 50.52%, #FF8A25 75.52%, #FF4359 100%);
     border-radius: 10px;
 }
 

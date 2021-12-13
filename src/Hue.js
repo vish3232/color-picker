@@ -16,7 +16,8 @@ export const HueWrapper = styled.div`
 
 export const Canvas = styled.canvas.attrs(p => ({
   width: squareSize,
-  height: barSize
+  height: barSize,
+  
 }))``
 
 export const Handle = styled.div.attrs(p => ({
@@ -26,7 +27,7 @@ export const Handle = styled.div.attrs(p => ({
   }
 }))`
   position: absolute;
-  top: 0px;
+  top: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,13 +48,7 @@ const Hue = ({ hueX, offsetLeft, animate, setHueX, setHue, setAnimate }) => {
 
   useEffect(() => {
     function computePosition(e) {
-      return Math.max(
-        barSize / -2,
-        Math.min(
-          e.clientX - offsetLeft + squareSize / 2 - barSize / 2,
-          squareSize - barSize / 2
-        )
-      )
+      return e.offsetX
     }
 
     function computeHue(x) {

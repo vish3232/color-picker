@@ -8,7 +8,7 @@ import throttle from "lodash.throttle"
 import { convertRGBtoHSL } from "./utils"
 import Svg from "./Svg"
 import usePaintSquare from "./usePaintSquare"
-
+import Hue from './Hue'
 
 const { squareSize, barSize, crossSize, inputSize,delay } = config
 export const SquareWrapper = styled.div`
@@ -194,7 +194,14 @@ useEffect(() => {
             </div>
 
             <div className="hue-container" >
-              
+            <Hue
+                hueX={hueX}
+                offsetLeft={offsetLeft}
+                animate={animate}
+                setHueX={setHueX}
+                setHue={setHue}
+                setAnimate={setAnimate}
+              />
             </div>
 
             <div className="transparancy-container" >
