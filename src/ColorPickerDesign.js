@@ -43,6 +43,35 @@ export const Canvas = styled.canvas.attrs(p => ({
 const ColorPickerDesign=(
     
 )=>{
+//drag code
+const elemRef = useRef(null)
+  const dragProps = useRef()
+  
+  const initialiseDrag = event => {
+    const { target, clientX, clientY } = event
+    const { offsetTop, offsetLeft } = target
+    const { left, top } = elemRef.current.getBoundingClientRect()
+    
+    dragProps.current = {
+      dragStartLeft: left - offsetLeft,
+      dragStartTop: top - offsetTop,
+      dragStartX: clientX,
+      dragStartY: clientY
+    }
+    window.addEventListener('mousemove', startDragging, false)
+    window.addEventListener('mouseup', stopDragging, false)
+  }
+  
+  
+  const startDragging = ({ clientX, clientY }) => {    
+    elemRef.current.style.transform = `translate(${dragProps.current.dragStartLeft + clientX - dragProps.current.dragStartX}px, ${dragProps.current.dragStartTop + clientY - dragProps.current.dragStartY}px)`
+  } 
+
+  const stopDragging = () => {
+    window.removeEventListener('mousemove', startDragging, false)
+    window.removeEventListener('mouseup', stopDragging, false)
+  }
+
 
     const [show, setShow] = useState(true)
   const [hue, setHue] = useState(180)
@@ -57,6 +86,11 @@ const ColorPickerDesign=(
   const [color, setColor] = useState(`hsla(180, 100%, 50%, 1)`)
   const [animate, setAnimate] = useState(false)
   const [hexCode,sethexCode]=useState('#FF8A25')
+  const [rgb,setrgb]=useState('')
+  const [hsl,sethsl]=useState('')
+  const [selectedColorType,setselectedColorType]=useState('hexcode')
+  const [selectedColorTypeModal,setselectedColorTypeModal]=useState(false)
+
 useEffect(() => {
     function setOffsets() {
       setOffsetTop(modal.current.offsetTop)
@@ -117,6 +151,7 @@ useEffect(() => {
 
       return [x2, y2]
     }
+    
 
     
 
@@ -126,7 +161,10 @@ useEffect(() => {
       const y1 = Math.min(y + crossSize / 2, squareSize - 1)
       const [r, g, b] = ctx.getImageData(x1, y1, 1, 1).data
       sethexCode(rgbToHex(r, g,b))
+      setrgb(`${r},${g},${b}`)
+      
       const [h, s, l] = convertRGBtoHSL([r, g, b])
+      sethsl(`${h},${s},${l}`)
       setSquare([s, l])
       setSquareXY([x-7, y-7])
     }
@@ -159,16 +197,21 @@ useEffect(() => {
 
     canvasRef.addEventListener("mousedown", onMouseDown)
 
+    
     return () => {
       canvasRef.removeEventListener("mousedown", onMouseDown)
     }
   }, [offsetTop, offsetLeft, setSquare, setSquareXY, setAnimate])
 
+  
 
     const data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}]
 
     return(
-        <div className="color-picker-main-container" >
+        <div
+        onMouseDown={initialiseDrag}
+        ref={elemRef}
+        className="color-picker-main-container" >
             <div className="dropdown-icons-container" >
                 <div className="dropdown-container" >
                    <div className="dropdown-container-header" > Solid</div>
@@ -209,16 +252,24 @@ useEffect(() => {
             </div>
 
             <div className="hex-code-and-tranparency-container" >
-                <div className="hex-code-container" >
-                    <div className="hex-code-header" >{hexCode}</div>
+                <div onClick={()=>setselectedColorTypeModal(!selectedColorTypeModal)} className="hex-code-container" >
+                    <div  className="hex-code-header" >{selectedColorType==="hexcode"?hexCode:""}{selectedColorType==="hsl"?`HSL(${hsl})` :""}{selectedColorType==="rgb"?`RGB(${rgb})`:""}</div>
                     <div><i class="material-icons dropdown-icon">expand_more</i></div>
-               
+                   {selectedColorTypeModal?
+                    <div className='rgb-hex-hcl-container' >
+                      <div onClick={()=>{setselectedColorType("rgb")}} className={selectedColorType==="rgb"?'selected-type-header':""} >rgb</div>
+                      <div onClick={()=>{setselectedColorType("hsl")}} className={selectedColorType==="hsl"?'selected-type-header':""} >hcl</div>
+                      <div onClick={()=>{setselectedColorType("hexcode")}} className={selectedColorType==="hexcode"?'selected-type-header':""}  >hexcode</div>
+                    </div>:<></>
+                   }
+
                 </div>
                 <div className="transparancy-header-container" >
                     <div className="transparancy-header" >100%</div>
                 </div>
             </div>
 
+           
             <div className="Tint-header" >
             Tints
             </div>
