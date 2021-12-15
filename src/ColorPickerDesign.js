@@ -46,24 +46,27 @@ const ColorPickerDesign=(
 //drag code
 const elemRef = useRef(null)
   const dragProps = useRef()
+  const parentRef=useRef(null)
   
   const initialiseDrag = event => {
     const { target, clientX, clientY } = event
     const { offsetTop, offsetLeft } = target
     const { left, top } = elemRef.current.getBoundingClientRect()
-    
+   // console.log(left,top);
     dragProps.current = {
       dragStartLeft: left - offsetLeft,
       dragStartTop: top - offsetTop,
       dragStartX: clientX,
       dragStartY: clientY
     }
+  
     window.addEventListener('mousemove', startDragging, false)
     window.addEventListener('mouseup', stopDragging, false)
+   
   }
   
   
-  const startDragging = ({ clientX, clientY }) => {    
+  const startDragging = ({ clientX, clientY }) => {  
     elemRef.current.style.transform = `translate(${dragProps.current.dragStartLeft + clientX - dragProps.current.dragStartX}px, ${dragProps.current.dragStartTop + clientY - dragProps.current.dragStartY}px)`
   } 
 
@@ -90,7 +93,9 @@ const elemRef = useRef(null)
   const [hsl,sethsl]=useState('')
   const [selectedColorType,setselectedColorType]=useState('hexcode')
   const [selectedColorTypeModal,setselectedColorTypeModal]=useState(false)
-
+  const [transparency,settransparency]=useState(0)
+  const [transparencyToHex,settransparencyToHex]=useState(0)
+  
 useEffect(() => {
     function setOffsets() {
       setOffsetTop(modal.current.offsetTop)
@@ -203,11 +208,16 @@ useEffect(() => {
     }
   }, [offsetTop, offsetLeft, setSquare, setSquareXY, setAnimate])
 
-  
+  const percentToHex = (p) => {
+    const intValue = Math.round(p / 100 * 255); // map percent to nearest integer (0 - 255)
+    const hexValue = intValue.toString(16); // get hexadecimal representation
+    return hexValue.padStart(2, '0').toUpperCase(); // format with leading 0 and upper case characters
+}
 
     const data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}]
 
     return(
+        
         <div
         onMouseDown={initialiseDrag}
         ref={elemRef}
@@ -247,7 +257,15 @@ useEffect(() => {
               />
             </div>
 
-            <div className="transparancy-container" >
+            <div onMouseDown={(e)=>{
+              
+              if((((e.clientX-20)*100)/245)<=100){
+                settransparency((((e.clientX-20)*100)/245).toFixed(0))
+               settransparencyToHex(percentToHex((((e.clientX-20)*100)/245).toFixed(0)))
+            }}} className="transparancy-container" >
+              <div style={{position:'absolute',left:`${transparency}%`,backgroundColor:'orange',width:10,height:10,borderRadius:5}} >
+
+              </div>
 
             </div>
 
@@ -265,7 +283,7 @@ useEffect(() => {
 
                 </div>
                 <div className="transparancy-header-container" >
-                    <div className="transparancy-header" >100%</div>
+                    <div className="transparancy-header" >{transparency}%</div>
                 </div>
             </div>
 
@@ -278,7 +296,7 @@ useEffect(() => {
                 {
                     data.map((data)=>{
                         return(
-                            <div style={{backgroundColor:hexCode}} className="tint-color-container" ></div>
+                            <div style={{backgroundColor:hexCode+transparencyToHex}} className="tint-color-container" ></div>
                         )
                     })
                 }
@@ -292,7 +310,7 @@ useEffect(() => {
                 {
                     data.map((data)=>{
                         return(
-                            <div style={{backgroundColor:hexCode}} className="Shades-color-container" ></div>
+                            <div style={{backgroundColor:hexCode+transparencyToHex}} className="Shades-color-container" ></div>
                         )
                     })
                 }
@@ -301,6 +319,7 @@ useEffect(() => {
 
 
         </div>
+        
     )
 }
 

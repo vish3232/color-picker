@@ -81,6 +81,8 @@ border-radius: 5px;
 }
 
 .transparancy-container{
+    position: relative;
+    cursor: crosshair;
     margin-top: 10px;
     width: 100%;
     height: 10px;
