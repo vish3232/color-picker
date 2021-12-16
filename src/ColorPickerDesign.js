@@ -53,21 +53,32 @@ const elemRef = useRef(null)
     const { offsetTop, offsetLeft } = target
     const { left, top } = elemRef.current.getBoundingClientRect()
    // console.log(left,top);
+    
     dragProps.current = {
-      dragStartLeft: left - offsetLeft,
-      dragStartTop: top - offsetTop,
+      dragStartLeft: left ,
+      dragStartTop: top ,
       dragStartX: clientX,
       dragStartY: clientY
     }
-  
+   
+
     window.addEventListener('mousemove', startDragging, false)
     window.addEventListener('mouseup', stopDragging, false)
-   
+
   }
   
   
   const startDragging = ({ clientX, clientY }) => {  
+    var parentPos = parentRef.current.getBoundingClientRect()
+    const childPos = elemRef.current.getBoundingClientRect()
+    console.log(dragProps.current.dragStartLeft);
+//console.log(parentPos);
+if(childPos.left>=parentPos.left&&childPos.top>=parentPos.top&&childPos.right<=parentPos.right&&childPos.bottom<=parentPos.bottom){
+
     elemRef.current.style.transform = `translate(${dragProps.current.dragStartLeft + clientX - dragProps.current.dragStartX}px, ${dragProps.current.dragStartTop + clientY - dragProps.current.dragStartY}px)`
+}else{
+  
+}
   } 
 
   const stopDragging = () => {
@@ -93,8 +104,8 @@ const elemRef = useRef(null)
   const [hsl,sethsl]=useState('')
   const [selectedColorType,setselectedColorType]=useState('hexcode')
   const [selectedColorTypeModal,setselectedColorTypeModal]=useState(false)
-  const [transparency,settransparency]=useState(0)
-  const [transparencyToHex,settransparencyToHex]=useState(0)
+  const [transparency,settransparency]=useState(100)
+  const [transparencyToHex,settransparencyToHex]=useState(null)
   
 useEffect(() => {
     function setOffsets() {
@@ -217,9 +228,9 @@ useEffect(() => {
     const data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}]
 
     return(
-        
+        <div ref={parentRef} style={{width:600,height:800,backgroundColor:'red'}} onMouseDown={initialiseDrag} >
         <div
-        onMouseDown={initialiseDrag}
+        
         ref={elemRef}
         className="color-picker-main-container" >
             <div className="dropdown-icons-container" >
@@ -259,11 +270,11 @@ useEffect(() => {
 
             <div onMouseDown={(e)=>{
               
-              if((((e.clientX-20)*100)/245)<=100){
+              if((((e.clientX-20)*100)/245)<=100&&(((e.clientX-20)*100)/245)>=0){
                 settransparency((((e.clientX-20)*100)/245).toFixed(0))
                settransparencyToHex(percentToHex((((e.clientX-20)*100)/245).toFixed(0)))
             }}} className="transparancy-container" >
-              <div style={{position:'absolute',left:`${transparency}%`,backgroundColor:'orange',width:10,height:10,borderRadius:5}} >
+              <div style={{position:'absolute',left:`${transparency-2}%`,backgroundColor:'orange',width:10,height:10,borderRadius:5}} >
 
               </div>
 
@@ -296,7 +307,7 @@ useEffect(() => {
                 {
                     data.map((data)=>{
                         return(
-                            <div style={{backgroundColor:hexCode+transparencyToHex}} className="tint-color-container" ></div>
+                            <div style={{backgroundColor:hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="tint-color-container" ></div>
                         )
                     })
                 }
@@ -310,7 +321,7 @@ useEffect(() => {
                 {
                     data.map((data)=>{
                         return(
-                            <div style={{backgroundColor:hexCode+transparencyToHex}} className="Shades-color-container" ></div>
+                            <div style={{backgroundColor:hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="Shades-color-container" ></div>
                         )
                     })
                 }
@@ -318,6 +329,7 @@ useEffect(() => {
 
 
 
+        </div>
         </div>
         
     )
