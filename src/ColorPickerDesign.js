@@ -284,19 +284,22 @@ useEffect(() => {
                 <div onClick={()=>setselectedColorTypeModal(!selectedColorTypeModal)} className="hex-code-container" >
                     <div  className="hex-code-header" >{selectedColorType==="hexcode"?hexCode:""}{selectedColorType==="hsl"?`HSL(${hsl})` :""}{selectedColorType==="rgb"?`RGB(${rgb})`:""}</div>
                     <div><i class="material-icons dropdown-icon">expand_more</i></div>
-                   {selectedColorTypeModal?
+                   
+
+                </div>
+                <div className="transparancy-header-container" >
+                    <div className="transparancy-header" >
+                      {transparency}%
+                      </div>
+                </div>
+            </div>
+            {selectedColorTypeModal?
                     <div className='rgb-hex-hcl-container' >
                       <div onClick={()=>{setselectedColorType("rgb")}} className={selectedColorType==="rgb"?'selected-type-header':""} >rgb</div>
                       <div onClick={()=>{setselectedColorType("hsl")}} className={selectedColorType==="hsl"?'selected-type-header':""} >hcl</div>
                       <div onClick={()=>{setselectedColorType("hexcode")}} className={selectedColorType==="hexcode"?'selected-type-header':""}  >hexcode</div>
                     </div>:<></>
                    }
-
-                </div>
-                <div className="transparancy-header-container" >
-                    <div className="transparancy-header" >{transparency}%</div>
-                </div>
-            </div>
 
            
             <div className="Tint-header" >
