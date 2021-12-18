@@ -100,8 +100,8 @@ if(childPos.left>=parentPos.left&&childPos.top>=parentPos.top&&childPos.right<=p
   const [color, setColor] = useState(`hsla(180, 100%, 50%, 1)`)
   const [animate, setAnimate] = useState(false)
   const [hexCode,sethexCode]=useState('#FF8A25')
-  const [rgb,setrgb]=useState('')
-  const [hsl,sethsl]=useState('')
+  const [rgb,setrgb]=useState('255, 138, 37')
+  const [hsl,sethsl]=useState('28, 100%, 57%')
   const [selectedColorType,setselectedColorType]=useState('hexcode')
   const [selectedColorTypeModal,setselectedColorTypeModal]=useState(false)
   const [transparency,settransparency]=useState(100)
@@ -180,7 +180,7 @@ useEffect(() => {
       setrgb(`${r},${g},${b}`)
       
       const [h, s, l] = convertRGBtoHSL([r, g, b])
-      sethsl(`${h},${s},${l}`)
+      sethsl(`${h},${s}%,${l}%`)
       setSquare([s, l])
       setSquareXY([x-7, y-7])
     }
@@ -281,15 +281,28 @@ useEffect(() => {
             </div>
 
             <div className="hex-code-and-tranparency-container" >
-                <div onClick={()=>setselectedColorTypeModal(!selectedColorTypeModal)} className="hex-code-container" >
-                    <div  className="hex-code-header" >{selectedColorType==="hexcode"?hexCode:""}{selectedColorType==="hsl"?`HSL(${hsl})` :""}{selectedColorType==="rgb"?`RGB(${rgb})`:""}</div>
-                    <div><i class="material-icons dropdown-icon">expand_more</i></div>
+                <div  className="hex-code-container" >
+                    {selectedColorType==="hexcode"?
+                      <input className='rgb-hex-hcl-input' type="text" value={hexCode.toString()} onChange={(e)=>sethexCode(e.target.value)} />:<></>
+                    }
+                    {selectedColorType==="hsl"?
+                      <input className='rgb-hex-hcl-input' type="text" value={hsl.toString()} onChange={(e)=>sethsl(e.target.value)} />:<></>
+                    }
+                    {selectedColorType==="rgb"?
+                      <input className='rgb-hex-hcl-input' type="text" value={rgb.toString()} onChange={(e)=>setrgb(e.target.value)} />:<></>
+                    }
+                    <div onClick={()=>setselectedColorTypeModal(!selectedColorTypeModal)}><i class="material-icons dropdown-icon">expand_more</i></div>
                    
 
                 </div>
                 <div className="transparancy-header-container" >
                     <div className="transparancy-header" >
-                      {transparency}%
+                      <input className='transparancy-input' type="text" value={transparency.toString()} onChange={(e)=>{
+                        if(e.target.value>=0&&e.target.value<=100){
+                        settransparency((e.target.value));settransparencyToHex(percentToHex(e.target.value))
+                        }
+                        }} />
+                      <div style={{marginLeft:5}} >%</div>
                       </div>
                 </div>
             </div>
@@ -309,10 +322,26 @@ useEffect(() => {
             <div className="tint-main-container" >
                 {
                     data.map((data)=>{
+                      if(selectedColorType==="hexcode"){
                         return(
-                            <div style={{backgroundColor:hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="tint-color-container" ></div>
+
+                            <div style={{backgroundColor: hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="tint-color-container" ></div>
                         )
+                      }
+                      if(selectedColorType==="hsl"){
+                        return(
+
+                            <div style={{backgroundColor: `hsl( ${hsl})`}} className="tint-color-container" ></div>
+                        )
+                      }
+                      if(selectedColorType==="rgb"){
+                        return(
+
+                            <div style={{backgroundColor:`RGB( ${rgb})`}} className="tint-color-container" ></div>
+                        )
+                      }
                     })
+                  
                 }
             </div>   
 
@@ -323,9 +352,25 @@ useEffect(() => {
             <div className="Shades-main-container" >
                 {
                     data.map((data)=>{
+                      if(selectedColorType==="hexcode"){
                         return(
-                            <div style={{backgroundColor:hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="Shades-color-container" ></div>
+
+                            <div style={{backgroundColor: hexCode+`${transparencyToHex===null?"":transparencyToHex}`}} className="Shades-color-container" ></div>
                         )
+                      }
+                      if(selectedColorType==="hsl"){
+                        return(
+
+                            <div style={{backgroundColor: `hsl( ${hsl})`}} className="Shades-color-container" ></div>
+                        )
+                      }
+                      if(selectedColorType==="rgb"){
+                        return(
+
+                            <div style={{backgroundColor:`RGB( ${rgb})`}} className="Shades-color-container" ></div>
+                        )
+                      }
+                      
                     })
                 }
             </div>   

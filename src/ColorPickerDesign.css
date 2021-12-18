@@ -143,6 +143,14 @@ color: #000000;
     align-self: flex-start;
 }
 
+.rgb-hex-hcl-input{
+    width: 80%;
+    height: 31px;
+    background-color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
 .selected-type-header{
     width: 80%;
 height: 28px;
@@ -172,7 +180,20 @@ background: #F8F8F9;
 border-radius: 5px;
 }
 
+.transparancy-input{
+    width: 80%;
+    height: 31px;
+    background-color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
 .transparancy-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     font-family: 'Poppins', sans-serif;
 font-style: normal;
 font-weight: normal;
@@ -183,7 +204,9 @@ text-align: center;
 letter-spacing: 0.02em;
 
 color: #000000;
-
+background-color: #F5F5F5;
+border-radius: 5px;
+  
 }
 
 .Tint-header{
