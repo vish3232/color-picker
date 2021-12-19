@@ -106,6 +106,8 @@ if(childPos.left>=parentPos.left&&childPos.top>=parentPos.top&&childPos.right<=p
   const [selectedColorTypeModal,setselectedColorTypeModal]=useState(false)
   const [transparency,settransparency]=useState(100)
   const [transparencyToHex,settransparencyToHex]=useState(null)
+  const [X,setX]=useState(0)
+  const [Y,setY]=useState(0)
   
 useEffect(() => {
     function setOffsets() {
@@ -144,7 +146,8 @@ useEffect(() => {
     function computePosition(e) {
       var x2 = e.offsetX ;
       var y2 = e.offsetY ;
-       
+       setX(x2)
+       setY(y2)
       //   const x = Math.max(
       //   crossSize / -2,
       //   Math.min(
@@ -218,7 +221,45 @@ useEffect(() => {
       canvasRef.removeEventListener("mousedown", onMouseDown)
     }
   }, [offsetTop, offsetLeft, setSquare, setSquareXY, setAnimate])
+  
+  
 
+  
+
+  function changeColor() {
+   
+    const canvasRef = canvas.current
+  const ctx = canvasRef.getContext("2d")
+
+    const x1 = Math.min(X + crossSize / 2, squareSize - 1)
+    const y1 = Math.min(Y + crossSize / 2, squareSize - 1)
+    const [r, g, b] = ctx.getImageData(x1, y1, 1, 1).data
+    sethexCode(()=> rgbToHex(r, g,b))
+    setrgb(`${r},${g},${b}`)
+    const [h, s, l] = convertRGBtoHSL([r, g, b])
+    sethsl(`${h},${s}%,${l}%`)
+    setSquare([s, l])
+    setSquareXY([X-7, Y-7])
+  }
+
+  function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  }
+
+  function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+  }
+    
+ 
+  useEffect(() => {
+    console.log(hue);
+   changeColor()
+    
+
+  }, [hue])
+
+  
   const percentToHex = (p) => {
     const intValue = Math.round(p / 100 * 255); // map percent to nearest integer (0 - 255)
     const hexValue = intValue.toString(16); // get hexadecimal representation
@@ -331,13 +372,13 @@ useEffect(() => {
                       if(selectedColorType==="hsl"){
                         return(
 
-                            <div style={{backgroundColor: `hsl( ${hsl})`}} className="tint-color-container" ></div>
+                            <div style={{backgroundColor: `hsl( ${hsl},${transparency/100})`}} className="tint-color-container" ></div>
                         )
                       }
                       if(selectedColorType==="rgb"){
                         return(
 
-                            <div style={{backgroundColor:`RGB( ${rgb})`}} className="tint-color-container" ></div>
+                            <div style={{backgroundColor:`RGB( ${rgb},${transparency/100})`}} className="tint-color-container" ></div>
                         )
                       }
                     })
@@ -361,13 +402,13 @@ useEffect(() => {
                       if(selectedColorType==="hsl"){
                         return(
 
-                            <div style={{backgroundColor: `hsl( ${hsl})`}} className="Shades-color-container" ></div>
+                            <div style={{backgroundColor: `hsl( ${hsl},${transparency/100})`}} className="Shades-color-container" ></div>
                         )
                       }
                       if(selectedColorType==="rgb"){
                         return(
 
-                            <div style={{backgroundColor:`RGB( ${rgb})`}} className="Shades-color-container" ></div>
+                            <div style={{backgroundColor:`RGB( ${rgb},${transparency/100})`}} className="Shades-color-container" ></div>
                         )
                       }
                       
