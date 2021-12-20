@@ -77,7 +77,9 @@ if(childPos.left>=parentPos.left&&childPos.top>=parentPos.top&&childPos.right<=p
 
     elemRef.current.style.transform = `translate(${dragProps.current.dragStartLeft + clientX - dragProps.current.dragStartX}px, ${dragProps.current.dragStartTop + clientY - dragProps.current.dragStartY}px)`
 }else{
-  
+  window.removeEventListener('mousemove', startDragging, false)
+  window.removeEventListener('mouseup', stopDragging, false)
+
 }
   } 
 
@@ -271,7 +273,7 @@ useEffect(() => {
     return(
         <div ref={parentRef} style={{width:600,height:800,backgroundColor:'red'}} onMouseDown={initialiseDrag} >
         <div
-        
+        onMouseDown={initialiseDrag}
         ref={elemRef}
         className="color-picker-main-container" >
             <div className="dropdown-icons-container" >
@@ -324,7 +326,9 @@ useEffect(() => {
             <div className="hex-code-and-tranparency-container" >
                 <div  className="hex-code-container" >
                     {selectedColorType==="hexcode"?
-                      <input className='rgb-hex-hcl-input' type="text" value={hexCode.toString()} onChange={(e)=>sethexCode(e.target.value)} />:<></>
+                      <input className='rgb-hex-hcl-input' type="text" value={hexCode.toString()} onChange={(e)=>{sethexCode(e.target.value); 
+
+                        }} />:<></>
                     }
                     {selectedColorType==="hsl"?
                       <input className='rgb-hex-hcl-input' type="text" value={hsl.toString()} onChange={(e)=>sethsl(e.target.value)} />:<></>
